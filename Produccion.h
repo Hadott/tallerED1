@@ -8,6 +8,7 @@ private:
     string tipoSolucion;
 public:
     Produccion(string,string,int,list<Usuario*>,float,string);
+    void determinarTipo()override;
     ~Produccion();
 };
 
@@ -16,7 +17,11 @@ Produccion::Produccion(string nombre,string dev,int clasificacion,list<Usuario*>
     this->tipoSolucion=tipoSolucion;
 
 }
+void Produccion::determinarTipo() {
+    cout<<"El software es de tipo "<<endl;
+}
 
+    
 Produccion::~Produccion()
 {
     delete this;

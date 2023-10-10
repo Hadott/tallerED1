@@ -13,6 +13,110 @@
 #include "Social.h"
 
 using namespace std;
+
+
+
+void determinarTipo(Software* software) {
+    if (Produccion* produccion = dynamic_cast<Produccion*>(software)) {
+        cout << "El software es de tipo Produccion." <<endl;
+    } else {
+        cout << "El software no es de tipo Produccion." <<endl;
+    }
+}
+list<Software*> llenarMisSoftwares(Usuario* tu,list<Software*> misSoftwares,list<Software*> softwares){
+    for (Software *s : softwares){
+        for(Usuario *u : s->getUsuarios()){
+            if (tu==u){
+                misSoftwares.push_back(s);
+            }
+        }  
+    }
+    return misSoftwares;
+}
+list <Software*> eliminarSoft(Usuario* tu,list<Software*> misSoftwares,list<Software*> softwares){
+    string nombre;
+    cout<<"What software do you want to delete?"<<endl;
+    for (Software *s : misSoftwares){
+        cout<<s->getNombre()<<endl;
+    }
+    cin>>nombre;
+    for (list<Software*>::iterator it = misSoftwares.begin(); it != misSoftwares.end(); ) {
+        if ((*it)->getNombre() == nombre) {
+            it = misSoftwares.erase(it); // Eliminar el software de la lista
+            break;
+        } else {
+            ++it;
+        }
+    }
+    return misSoftwares;
+}
+list <Software*> instalarSoft(Usuario* tu,list<Software*> misSoftwares,list<Software*> softwares){
+    string nombre;
+    cout<<"What software do you want to install?"<<endl;
+    for (Software *s : softwares){
+        cout<<s->getNombre()<<endl;
+    }
+    cin>>nombre;
+    for (Software *s : softwares){
+        if (nombre==s->getNombre()){
+
+            misSoftwares.push_back(s);
+            break;
+        }
+    }
+    return misSoftwares;
+}
+Usuario* login(list <Usuario*> usuarios){
+    string user,pass;
+    bool log = false;
+    Usuario *tu = NULL;
+    while (log==false)
+    {
+        cout<<"Username: ";
+        cin>>user;
+        cout<<"Password: ";
+        cin>>pass;
+        for (Usuario *u : usuarios){   
+            if (u->getNombre()==user && u->getContrasena()==pass){
+                log=true;
+                cout<<"Logged in, Welcome "<<u->getNombre()<<endl;
+                tu = u;
+                break;
+            }
+
+        }
+    }
+    cout<<tu->getNombre()<<endl;
+    return tu;
+}
+void menuPrincipal(Usuario* tu,list<Software*> softwares,list<Software*> misSoftwares,list<Usuario*> usuarios){
+    cout<<"-----------------------------------------------------------------------------------"<<endl;
+    cout<<"Softwares: "<<endl;
+    for (Software *s : misSoftwares){
+        cout<<s->getNombre()<<endl;
+    }
+    cout<<"What do you want to do?"<<endl;
+    cout<<"1. Install software"<<endl;
+    cout<<"2. Delete software"<<endl;
+    cout<<"3. Exit"<<endl;
+    int op;
+    cin>>op;
+    switch (op){
+        case 1:
+            misSoftwares = instalarSoft(tu,misSoftwares,softwares);
+            break;
+        case 2:
+            misSoftwares = eliminarSoft(tu,misSoftwares,softwares);
+            break;
+        case 3:
+            tu = login(usuarios);
+            misSoftwares.clear();
+            misSoftwares =llenarMisSoftwares(tu,misSoftwares,softwares);
+            break;
+    }
+    menuPrincipal(tu,softwares,misSoftwares,usuarios);
+}
+
 int main() {
     
     list<Usuario*> usuarios;
@@ -58,15 +162,15 @@ int main() {
     usuarios.push_back(p14);
     Usuario *p15 = new Normal("Hugo","1234",76,"hugo@gmail");
     usuarios.push_back(p15);
-    Software *j1= new Juego("Warcraft III","Blizzard",16,{p10} ,60.0,"RTS");
+    Software *j1= new Juego("Warcraft III","Blizzard",16,{p10,p11} ,60.0,"RTS");
     Software *j2 = new Juego("Warcraft","Blizzard",16,{p13} ,50.0,"RTS");
     Software *j3 = new Juego("Counter Strike Global Offensive","Valve",18,{p13,p3} ,50.0,"FPS");
     Software *j4 = new Juego("Counter Strike Global Offensive","Valve",18,{p13} ,50.0,"FPS");
-    Software *j5 = new Juego("World of Warcraft","Blizzard",16,{p2,p3,p4} ,50.0,"MMORPG");
+    Software *j5 = new Juego("World of Warcraft","Blizzard",16,{p2,p3,p4,p11} ,50.0,"MMORPG");
     Software *j6 = new Juego("League of Legends","Riot Games",5,{p11} ,50.0,"MOBA");
     Software *j7 = new Juego("Dota 2","Valve",18,{p5} ,50.0,"MOBA");
     Software *j8 = new Juego("Black Desert","Koei Tecmo",18,{p6} ,50.0,"MMORPG");
-    Software *j9 = new Juego("HeartStone","Valve",5,{p7,p2} ,50.0,"Cards"); 
+    Software *j9 = new Juego("HeartStone","Blizzard",5,{p7,p2} ,50.0,"Cards"); 
     Software *j10 = new Juego("Gwent","CD Projekt",5,{p1,p2} ,50.0,"Cards");
     Software *j11 = new Juego("Amnesia","Frictional Games",18,{p2,p3,p5} ,50.0,"Horror");
     Software *j12 = new Juego("Project Zero","Frictional Games",18,{p9} ,50.0,"Horror");
@@ -137,39 +241,10 @@ int main() {
     softwares.push_back(sc1);
     softwares.push_back(sc2);
 
-    string user,pass;
-    bool log = false;
-    Usuario *tu = NULL;
-    while (log==false)
-    {
-        cout<<"Username: ";
-        cin>>user;
-        cout<<"Password: ";
-        cin>>pass;
-        for (Usuario *u : usuarios){   
-            if (u->getNombre()==user && u->getContrasena()==pass){
-                log=true;
-                cout<<"Logged in, Welcome "<<u->getNombre()<<endl;
-                tu = u;
-                break;
-            }
-
-        }
-    }
-    cout<<tu->getNombre()<<endl;
-
+    Usuario* tu = login(usuarios);
     list<Software*> misSoftwares;
-    for (Software *s : softwares){
-        for(Usuario *u : s->getUsuarios()){
-            if (tu==u){
-                misSoftwares.push_back(s);
-            }
-        }
-        
-    }
-    cout<<"Softwares: ";
-    for (Software *s : misSoftwares){
-        cout<<s->getNombre()<<" ";
-    }
+    misSoftwares =llenarMisSoftwares(tu,misSoftwares,softwares);
+    menuPrincipal(tu,softwares,misSoftwares,usuarios);
+    
     return 0;
 }

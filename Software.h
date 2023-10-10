@@ -20,6 +20,7 @@ public:
     string getDev();
     int getClasificacion();
     list<Usuario*> getUsuarios();
+    virtual void determinarTipo();
     ~Software();
 };
 
@@ -37,6 +38,9 @@ string Software::getNombre(){
 }
 list<Usuario*> Software::getUsuarios(){
     return usuarios;
+}
+void Software::determinarTipo (){ 
+    cout<<"El software es de tipo "<<endl;
 }
 
 
