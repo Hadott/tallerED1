@@ -24,6 +24,13 @@ void determinarTipo(Software* software) {
     }
 }
 list<Software*> llenarMisSoftwares(Usuario* tu,list<Software*> misSoftwares,list<Software*> softwares){
+    /**
+ * Llena la lista 'misSoftwares' con objetos de software que tienen al usuario dado como uno de sus usuarios.
+ *
+ * Return:La lista 'misSoftwares' actualizada con los objetos de software coincidentes.
+ *
+ * 
+ */
     for (Software *s : softwares){
         for(Usuario *u : s->getUsuarios()){
             if (tu==u){
@@ -34,6 +41,13 @@ list<Software*> llenarMisSoftwares(Usuario* tu,list<Software*> misSoftwares,list
     return misSoftwares;
 }
 list <Software*> eliminarSoft(Usuario* tu,list<Software*> misSoftwares,list<Software*> softwares){
+    /*
+     * Elimina el software de la lista 'misSoftwares' que elija el usuario.
+     * 
+     * Return:La lista 'misSoftwares' actualizada con el software eliminado.
+     * 
+     * 
+     */
     string nombre;
     cout<<"What software do you want to delete?"<<endl;
     for (Software *s : misSoftwares){
@@ -51,6 +65,13 @@ list <Software*> eliminarSoft(Usuario* tu,list<Software*> misSoftwares,list<Soft
     return misSoftwares;
 }
 list <Software*> instalarSoft(Usuario* tu,list<Software*> misSoftwares,list<Software*> softwares){
+    /*
+     * Agrega el software de elegido por el usuario a la lista 'misSoftwares'.
+     * 
+     * Return:La lista 'misSoftwares' actualizada con el software agregado.
+     * 
+     * 
+     */
     string nombre;
     cout<<"What software do you want to install?"<<endl;
     for (Software *s : softwares){
@@ -67,6 +88,13 @@ list <Software*> instalarSoft(Usuario* tu,list<Software*> misSoftwares,list<Soft
     return misSoftwares;
 }
 Usuario* login(list <Usuario*> usuarios){
+    /*
+    * Logea al usuario usando un booleano que dice si se ha logeado o no.
+    * 
+    * Return:El usuario que se ha logeado.
+    *
+    */
+
     string user,pass;
     bool log = false;
     Usuario *tu = NULL;
@@ -90,6 +118,10 @@ Usuario* login(list <Usuario*> usuarios){
     return tu;
 }
 void menuPrincipal(Usuario* tu,list<Software*> softwares,list<Software*> misSoftwares,list<Usuario*> usuarios){
+    /*
+     * Menu principal del programa.
+     *
+     */
     cout<<"-----------------------------------------------------------------------------------"<<endl;
     cout<<"Softwares: "<<endl;
     for (Software *s : misSoftwares){
@@ -98,9 +130,12 @@ void menuPrincipal(Usuario* tu,list<Software*> softwares,list<Software*> misSoft
     cout<<"What do you want to do?"<<endl;
     cout<<"1. Install software"<<endl;
     cout<<"2. Delete software"<<endl;
-    cout<<"3. Exit"<<endl;
+    cout<<"3. Login"<<endl;
+    cout<<"4. Exit"<<endl;
+    cout<<"-----------------------------------------------------------------------------------"<<endl;
     int op;
     cin>>op;
+    /*Switch statement que controla las opciones del menu principal*/
     switch (op){
         case 1:
             misSoftwares = instalarSoft(tu,misSoftwares,softwares);
@@ -109,15 +144,33 @@ void menuPrincipal(Usuario* tu,list<Software*> softwares,list<Software*> misSoft
             misSoftwares = eliminarSoft(tu,misSoftwares,softwares);
             break;
         case 3:
+            /**
+             * Crea un nuevo usuario actual "tu".
+             * Limpia la lista de mis softwares.
+             * Llena la lista de mis softwares con los softwares del usuario "tu".
+            */
             tu = login(usuarios);
             misSoftwares.clear();
             misSoftwares =llenarMisSoftwares(tu,misSoftwares,softwares);
             break;
+        case 4:
+            /**
+             * Sale del programa.
+             */
+            return;
     }
     menuPrincipal(tu,softwares,misSoftwares,usuarios);
 }
 
 int main() {
+    /**
+     * Main
+     * 
+     * Crea una lista de usuarios.
+     * Crea una lista de softwares.
+     * Crea a los usuarios y los agregas a la lista de usuarios.
+     * Crea a los softwares y los agregas a la lista de softwares.
+    */
     
     list<Usuario*> usuarios;
     list<Software*> softwares;
@@ -162,13 +215,13 @@ int main() {
     usuarios.push_back(p14);
     Usuario *p15 = new Normal("Hugo","1234",76,"hugo@gmail");
     usuarios.push_back(p15);
-    Software *j1= new Juego("Warcraft III","Blizzard",16,{p10,p11} ,60.0,"RTS");
+    Software *j1= new Juego("WarcraftIII","Blizzard",16,{p10,p11} ,60.0,"RTS");
     Software *j2 = new Juego("Warcraft","Blizzard",16,{p13} ,50.0,"RTS");
     Software *j3 = new Juego("Counter Strike Global Offensive","Valve",18,{p13,p3} ,50.0,"FPS");
-    Software *j4 = new Juego("Counter Strike Global Offensive","Valve",18,{p13} ,50.0,"FPS");
+    Software *j4 = new Juego("Counter Strike Global Offensive 2","Valve",18,{p13} ,50.0,"FPS");
     Software *j5 = new Juego("World of Warcraft","Blizzard",16,{p2,p3,p4,p11} ,50.0,"MMORPG");
     Software *j6 = new Juego("League of Legends","Riot Games",5,{p11} ,50.0,"MOBA");
-    Software *j7 = new Juego("Dota 2","Valve",18,{p5} ,50.0,"MOBA");
+    Software *j7 = new Juego("Dota2","Valve",18,{p5} ,50.0,"MOBA");
     Software *j8 = new Juego("Black Desert","Koei Tecmo",18,{p6} ,50.0,"MMORPG");
     Software *j9 = new Juego("HeartStone","Blizzard",5,{p7,p2} ,50.0,"Cards"); 
     Software *j10 = new Juego("Gwent","CD Projekt",5,{p1,p2} ,50.0,"Cards");
@@ -176,10 +229,10 @@ int main() {
     Software *j12 = new Juego("Project Zero","Frictional Games",18,{p9} ,50.0,"Horror");
     Software *j13 = new Juego("Super Mario World","Nintendo",5,{p7,p6} ,50.0,"Platformer");
     Software *j14 = new Juego("Sonic","Sega",5,{p2,p5,p10} ,50.0,"Platformer");
-    Software *j15 = new Juego("Fifa","Electronic Arts",5,{p10,p2} ,50.0,"Sports");
-    Software *j16 = new Juego("Fifa","Electronic Arts",5,{p10,p2} ,50.0,"Sports");
-    Software *j17 = new Juego("The Elder Scrolls","Bethesda",18,{p3} ,50.0,"RPG");
-    Software *j18 = new Juego("The Elder Scrolls 2","Bethesda",18,{p5} ,50.0,"RPG");
+    Software *j15 = new Juego("Fifa02","Electronic Arts",5,{p10,p2} ,50.0,"Sports");
+    Software *j16 = new Juego("Fifa14","Electronic Arts",5,{p10,p2} ,50.0,"Sports");
+    Software *j17 = new Juego("TheElderScrolls","Bethesda",18,{p3} ,50.0,"RPG");
+    Software *j18 = new Juego("TheElderScrollsOnline","Bethesda",18,{p5} ,50.0,"RPG");
     Software *j19 = new Juego("Time Commando"," Adeline Software International",18,{p2} ,50.0,"Adventure");
     Software *j20 = new Juego("Unreal Tournament"," Epic Games",18,{p5} ,50.0,"FPS");
     Software *o1 = new Office("PowerPoint","Microsoft",0,{p2,p3,p4} ,50.0,2);
@@ -187,7 +240,7 @@ int main() {
     Software *o3 = new Office("Word","Microsoft",0,{p2,p3,p4} ,30.0,2);
     Software *o4 = new Office("Access","Microsoft",0,{p2,p3,p4} ,30.0,2);
     Software *o5 = new Office("Project","Microsoft",0,{p2,p3,p4} ,30.0,2);
-    Software *pr1 = new Produccion("Vegas pro","Vegas",18,{p2,p3,p4} ,30.0,"Video");
+    Software *pr1 = new Produccion("Vegaspro","Vegas",18,{p2,p3,p4} ,30.0,"Video");
     Software *pr2 = new Produccion("FL Studio","FL",18,{p2,p3,p4} ,30.0,"Musica");
     Software *pr3 = new Produccion("Adobe PhotoShop","Adobe",18,{p2,p3,p4} ,30.0,"Fotos");
     Software *pr4 = new Produccion("OBS","Obs",18,{p2,p3,p4} ,30.0,"Streaming");
@@ -240,7 +293,13 @@ int main() {
     softwares.push_back(s6);
     softwares.push_back(sc1);
     softwares.push_back(sc2);
-
+    /**
+     * Crea un nuevo usuario actual "tu".
+     * Crea una lista 'misSoftwares' vacia.
+     * Llena la lista 'misSoftwares' con software que tienen al usuario dado como uno de sus usuarios.
+     * 
+     * Se va al menu principal.
+    */
     Usuario* tu = login(usuarios);
     list<Software*> misSoftwares;
     misSoftwares =llenarMisSoftwares(tu,misSoftwares,softwares);
